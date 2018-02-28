@@ -2,6 +2,8 @@ var table;
 var lowNode, highNode;
 var nodeArr = [];
 var increAmount; // How much to increase each tick on the axis by
+var xAxisMid = []; // To value of the middle coordinate between two axis points: Labeling of node on axes
+var yAxisMid = [];
 
 function preload() {
 	// Variable to change what .edges file to read
@@ -22,9 +24,37 @@ function setup() {
 	nodeClean(); 
 
 	// Round by two decimal places because of subdividing area leaking onto box perimeter
-	increAmount = Math.round((800 / nodeArr.length) * 100) / 100;
+	increAmount = twoDecRound((800 / nodeArr.length));
 	// print(increAmount);
   	
+  	// Finds middle of all the points on the axes
+  	findXMid();
+  	findYMid();
+
+}
+
+function findXMid() {
+	var midX, mask;
+    for(var i = 65; i <= 865; i += increAmount) {
+    	// If it's past the first iteration
+    	if(i > 65) {
+    		mask = i;
+    		midX = (mask + (mask -= increAmount)) / 2;
+			xAxisMid.push(midX);
+    	}
+    }
+}
+
+function findYMid() {
+	var midY, mask;
+    for(var i = 75; i <= 875; i += increAmount) {
+    	// If it's past the first iteration
+    	if(i > 75) {
+    		mask = i;
+    		midY = (mask + (mask -= increAmount)) / 2;
+			yAxisMid.push(midY);
+    	}
+    }
 }
 
 /*
@@ -62,6 +92,13 @@ function arrSortHelper(a, b) {
 	return a - b;
 }
 
+/*
+	Function to help round values to two decimal places
+*/
+function twoDecRound(a) {
+	return Math.round((a * 100) / 100);
+}
+
 function draw() {
 	background(255);
 
@@ -81,10 +118,22 @@ function draw() {
     	line(75, i, 875, i);
     }
 
-    // Printing each node on the axes
+
+    // Printing each node on the x axis
+ 	var xCount = 0;
     for(var i = 0; i < nodeArr.length; i++) {
-    
+    	text(nodeArr[i], xAxisMid[xCount], 875, 100, 100);
+    	xCount++;
     }
+
+    // Printing each node on the y axis
+  	var yCount = 0;
+    for(var i = nodeArr.length -1; i >= 0; i--) {
+    	text(nodeArr[i], 50, yAxisMid[yCount], 100, 100);
+    	yCount++;
+    }
+
+    
 
 
 }
