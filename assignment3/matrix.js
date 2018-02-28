@@ -31,6 +31,10 @@ function setup() {
   	findXMid();
   	findYMid();
 
+  	// for(var i = 0; i < table.length; i++) {
+  	// 	console.log(nodeArr[i]);
+  	// }
+
 }
 
 function findXMid() {
@@ -118,7 +122,6 @@ function draw() {
     	line(75, i, 875, i);
     }
 
-
     // Printing each node on the x axis
  	var xCount = 0;
     for(var i = 0; i < nodeArr.length; i++) {
@@ -133,7 +136,17 @@ function draw() {
     	yCount++;
     }
 
-    
+    // Label of the x axis
+    var y_cat = "Nodes";
+	text(y_cat, 450, 925, 1000, 1000);
+
+	// Label of the y axis
+	var x_cat = "Nodes";
+	text(x_cat, 25, 25, 1000, 1000);
+
+	// Fill in boxes where edges have a connection
+
+	// Implement highlight feature
 
 
 }
