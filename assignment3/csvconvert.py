@@ -16,7 +16,7 @@ with open(fileName, 'r') as f:
 d = zip(col0, col1) #Each element in d is tuple
 #To access either element, for i(to get key) and then i[0](to get value)
 
-with open("edges0.csv", 'w') as csvfile:
+with open("data/csvfiles/edges0.csv", 'w') as csvfile:
 		fieldnames = ['first_node', 'second_node']
 		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
