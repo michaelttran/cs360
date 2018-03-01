@@ -4,6 +4,16 @@ var nodeArr = [];
 var increAmount; // How much to increase each tick on the axis by
 var xAxisMid = []; // To value of the middle coordinate between two axis points: Labeling of node on axes
 var yAxisMid = [];
+var nodeAddr = []; // Dictionary to map nodes to a sequence of numbers, representing x or y axis
+var matrxCntr = [];
+
+/*
+Pseudo javascript dictionary	
+	nodeAddr.push({
+		key:
+		value: 
+})
+*/
 
 function preload() {
 	// Variable to change what .edges file to read
@@ -30,6 +40,45 @@ function setup() {
   	// Finds middle of all the points on the axes
   	findXMid();
   	findYMid();
+
+  	for(var i = 0; i < nodeArr.length; i++) {
+  		nodeAddr.push({
+  			key: nodeArr[i],
+  			value: i
+  		});
+  	}
+
+  	// To print the entire dictionary out
+  	print(nodeAddr); 
+    var midIncre = increAmount / 2;
+    var totalSquare = Math.pow(nodeArr.length, 2); // Total squares in the matrix
+
+    var test_c = 0;
+    var midXCount = 0; 
+    var midYCount = 0; 
+    for(var i = (65 + midIncre); i <= 1565; i += midIncre) {
+      for(var j = (75 + midIncre); j <= 1575; j += midIncre) {
+        if(midXCount % 2 == 0 && midYCount % 2 == 0) {
+          // print(j, i);
+          test_c++;
+        }
+        if(j >= (1575 - midIncre)) {
+          midXCount = 0;
+        } else {
+          midXCount++;          
+        }
+      }
+
+      if(i >= (1565 - midIncre)) {
+        midYCount = 0;
+      } else {
+        midYCount++;
+      }
+    }
+
+    print(test_c);
+
+  	
 }
 
 function findXMid() {
@@ -39,7 +88,7 @@ function findXMid() {
     	if(i > 65) {
     		mask = i;
     		midX = (mask + (mask -= increAmount)) / 2;
-			xAxisMid.push(midX);
+			 xAxisMid.push(midX);  
     	}
     }
 }
@@ -102,7 +151,7 @@ function draw() {
 	background(255);
 
 	// Lines for the axis- goes left, up, right, down
-	line(75, 65, 75, 1565);
+    line(75, 65, 75, 1565);
     line(75, 65, 1575, 65);
     line(1575, 65, 1575, 1565);
     line(75, 1565, 1575, 1565);
@@ -118,7 +167,7 @@ function draw() {
     }
 
     // Printing each node on the x axis
- 	var xCount = 0;
+ 	  var xCount = 0;
     for(var i = 0; i < nodeArr.length; i++) {
     	text(nodeArr[i], xAxisMid[xCount], 40, 100, 100);
     	xCount++;
@@ -132,12 +181,12 @@ function draw() {
     }
 
     // Label of the x axis
- 	var y_cat = "Nodes";
-	text(y_cat, 30, 10, 1000, 1000);
+   	var y_cat = "Nodes";
+  	text(y_cat, 30, 10, 1000, 1000);
 
-	// Label of the y axis
-	var x_cat = "Nodes";
-	text(x_cat, 5, 60, 1000, 1000);
+  	// Label of the y axis
+  	var x_cat = "Nodes";
+  	text(x_cat, 5, 60, 1000, 1000);
 
 	// Fill in boxes where nodes have an edge
 
