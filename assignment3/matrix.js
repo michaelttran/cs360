@@ -8,14 +8,14 @@ var yAxisMid = [];
 function preload() {
 	// Variable to change what .edges file to read
 	// Usage: "data/csvfiles/edgesNumber.csv": I reversed edges and the title number to conform to variable rules
-	var fileLoc = "data/csvfiles/edgesTest.csv"
+	var fileLoc = "data/csvfiles/edges698.csv"
 	table = loadTable(fileLoc, 'csv',
 	'header');
 }
 
 function setup() {
 	// Canvas is the entire screen on the browser
-	createCanvas(1000, 1000); 
+	createCanvas(2000, 2000); 
   	noSmooth();
 
   	// Pick a number from within the set to make sure it exists
@@ -24,22 +24,17 @@ function setup() {
 	nodeClean(); 
 
 	// Round by two decimal places because of subdividing area leaking onto box perimeter
-	increAmount = twoDecRound((800 / nodeArr.length));
+	increAmount = twoDecRound((1500 / nodeArr.length));
 	// print(increAmount);
   	
   	// Finds middle of all the points on the axes
   	findXMid();
   	findYMid();
-
-  	// for(var i = 0; i < table.length; i++) {
-  	// 	console.log(nodeArr[i]);
-  	// }
-
 }
 
 function findXMid() {
 	var midX, mask;
-    for(var i = 65; i <= 865; i += increAmount) {
+    for(var i = 65; i <= 1565; i += increAmount) {
     	// If it's past the first iteration
     	if(i > 65) {
     		mask = i;
@@ -51,12 +46,12 @@ function findXMid() {
 
 function findYMid() {
 	var midY, mask;
-    for(var i = 75; i <= 875; i += increAmount) {
+    for(var i = 75; i <= 1575; i += increAmount) {
     	// If it's past the first iteration
     	if(i > 75) {
     		mask = i;
     		midY = (mask + (mask -= increAmount)) / 2;
-			yAxisMid.push(midY);
+			yAxisMid.push(midY - 8);
     	}
     }
 }
@@ -107,44 +102,44 @@ function draw() {
 	background(255);
 
 	// Lines for the axis- goes left, up, right, down
-	line(75, 65, 75, 865);
-    line(75, 65, 875, 65);
-    line(875, 65, 875, 865);
-    line(75, 865, 875, 865);
+	line(75, 65, 75, 1565);
+    line(75, 65, 1575, 65);
+    line(1575, 65, 1575, 1565);
+    line(75, 1565, 1575, 1565);
     
     // Lines for the y axis/columns
-    for(var i = 75; i <= 875; i += increAmount) {
-    	line(i, 865, i, 65);
+    for(var i = 75; i <= 1575; i += increAmount) {
+    	line(i, 1565, i, 65);
     }
     
     // Lines for the x axis/rows
-    for(var i = 65; i <= 865; i += increAmount) {
-    	line(75, i, 875, i);
+    for(var i = 65; i <= 1565; i += increAmount) {
+    	line(75, i, 1575, i);
     }
 
     // Printing each node on the x axis
  	var xCount = 0;
     for(var i = 0; i < nodeArr.length; i++) {
-    	text(nodeArr[i], xAxisMid[xCount], 875, 100, 100);
+    	text(nodeArr[i], xAxisMid[xCount], 40, 100, 100);
     	xCount++;
     }
 
     // Printing each node on the y axis
   	var yCount = 0;
-    for(var i = nodeArr.length -1; i >= 0; i--) {
-    	text(nodeArr[i], 50, yAxisMid[yCount], 100, 100);
+    for(var i = 0; i < nodeArr.length; i++) {
+    	text(nodeArr[i], 50, yAxisMid[yCount] - 10, 100, 100);
     	yCount++;
     }
 
     // Label of the x axis
-    var y_cat = "Nodes";
-	text(y_cat, 450, 925, 1000, 1000);
+ 	var y_cat = "Nodes";
+	text(y_cat, 30, 10, 1000, 1000);
 
 	// Label of the y axis
 	var x_cat = "Nodes";
-	text(x_cat, 25, 25, 1000, 1000);
+	text(x_cat, 5, 60, 1000, 1000);
 
-	// Fill in boxes where edges have a connection
+	// Fill in boxes where nodes have an edge
 
 	// Implement highlight feature
 

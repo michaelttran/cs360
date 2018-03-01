@@ -4,7 +4,7 @@ d = {}
 col0 = [] #First column of edge file
 col1 = [] #Second column of edge file
 
-fileName = "data/facebook/0.edges"
+fileName = "data/facebook/698.edges"
 
 with open(fileName, 'r') as f:
 	for line in f:
@@ -16,7 +16,7 @@ with open(fileName, 'r') as f:
 d = zip(col0, col1) #Each element in d is tuple
 
 #To access either element, for i(to get key) and then i[0](to get value)
-with open("data/csvfiles/edges0.csv", 'w') as csvfile:
+with open("data/csvfiles/edges698.csv", 'w') as csvfile:
 		fieldnames = ['first_node', 'second_node']
 		writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 		writer.writeheader()
