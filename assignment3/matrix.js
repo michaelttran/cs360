@@ -4,16 +4,7 @@ var nodeArr = [];
 var increAmount; // How much to increase each tick on the axis by
 var xAxisMid = []; // To value of the middle coordinate between two axis points: Labeling of node on axes
 var yAxisMid = [];
-var nodeAddr = []; // Dictionary to map nodes to a sequence of numbers, representing x or y axis
 var matrxCntr = [];
-
-/*
-Pseudo javascript dictionary	
-	nodeAddr.push({
-		key:
-		value: 
-})
-*/
 
 function preload() {
 	// Variable to change what .edges file to read
@@ -26,7 +17,7 @@ function preload() {
 function setup() {
 	// Canvas is the entire screen on the browser
 	createCanvas(2000, 2000); 
-  	noSmooth();
+  noSmooth();
 
   	// Pick a number from within the set to make sure it exists
 	lowNode = highNode = table.getNum(0,0); 
@@ -38,47 +29,45 @@ function setup() {
 	// print(increAmount);
   	
   	// Finds middle of all the points on the axes
-  	findXMid();
-  	findYMid();
+	findXMid();
+	findYMid();
 
-  	for(var i = 0; i < nodeArr.length; i++) {
-  		nodeAddr.push({
-  			key: nodeArr[i],
-  			value: i
-  		});
-  	}
+	// To print the entire dictionary out
+  findMidPoints();
+  console.log(matrxCntr);
+}
 
-  	// To print the entire dictionary out
-  	print(nodeAddr); 
-    var midIncre = increAmount / 2;
-    var totalSquare = Math.pow(nodeArr.length, 2); // Total squares in the matrix
-
-    var test_c = 0;
-    var midXCount = 0; 
-    var midYCount = 0; 
-    for(var i = (65 + midIncre); i <= 1565; i += midIncre) {
-      for(var j = (75 + midIncre); j <= 1575; j += midIncre) {
-        if(midXCount % 2 == 0 && midYCount % 2 == 0) {
-          // print(j, i);
-          test_c++;
-        }
-        if(j >= (1575 - midIncre)) {
-          midXCount = 0;
-        } else {
-          midXCount++;          
-        }
+function findMidPoints() {
+  var midIncre = increAmount / 2;
+  var totalSquare = Math.pow(nodeArr.length, 2); // Total squares in the matrix
+  var test_c = 0;
+  var midXCount = 0; 
+  var midYCount = 0; 
+  var filled;
+  for(var i = (65 + midIncre); i <= 1565; i += midIncre) {
+    for(var j = (75 + midIncre); j <= 1575; j += midIncre) {
+      if(midXCount % 2 == 0 && midYCount % 2 == 0 && i != 1565 && j != 1575) {
+        // print(j, i);
+        matrxCntr.push({
+          filled: false,
+          x_val: j,
+          y_val: i
+        });
+        // ellipse(j, i, 5, 5);
       }
-
-      if(i >= (1565 - midIncre)) {
-        midYCount = 0;
+      if(j >= (1575)) {
+        midXCount = 0;
       } else {
-        midYCount++;
+        midXCount++;          
       }
     }
 
-    print(test_c);
-
-  	
+    if(i >= (1565)) {
+      midYCount = 0;
+    } else {
+      midYCount++;
+    }
+  }
 }
 
 function findXMid() {
@@ -113,7 +102,7 @@ function findYMid() {
 function nodeClean() {
 	// Runs through the csv file to find the lowest and highest value nodes
   	for(var i = 0; i < table.getRowCount(); i++) {
-  		for(var j = 0; j < table.getColumnCount(); j++) {
+      for(var j = 0; j < table.getColumnCount(); j++) {
   			if(table.getNum(i, j) < lowNode) {
   				lowNode = table.getNum(i, j);
   			}
@@ -126,7 +115,6 @@ function nodeClean() {
   				nodeArr.push(table.getNum(i, j));
   			}
   		}
-
   	}
 
   	// Sorts all the known nodes from least to highest
@@ -149,6 +137,7 @@ function twoDecRound(a) {
 
 function draw() {
 	background(255);
+  // noStroke();
 
 	// Lines for the axis- goes left, up, right, down
     line(75, 65, 75, 1565);
@@ -169,7 +158,7 @@ function draw() {
     // Printing each node on the x axis
  	  var xCount = 0;
     for(var i = 0; i < nodeArr.length; i++) {
-    	text(nodeArr[i], xAxisMid[xCount], 40, 100, 100);
+    	text(nodeArr[i], xAxisMid[xCount], 40, 100, 100); 
     	xCount++;
     }
 
@@ -188,9 +177,38 @@ function draw() {
   	var x_cat = "Nodes";
   	text(x_cat, 5, 60, 1000, 1000);
 
-	// Fill in boxes where nodes have an edge
+    // Title
+    var title = "Matrix representation of friends";
+    textSize(32);
+    text(title, 700, 0, 1000, 1000);    
+
+    textSize(12);
+
+  // Filled points
+  for(var i = 0; i < table.getRowCount(); i++) {
+    var node1 = table.getNum(i, 1);
+    var node2 = table.getNum(i, 0);
+    var position = nodeArr.indexOf(node1) * nodeArr.indexOf(node2);
+    var size = map(90, 0, 99, 0, increAmount);
+
+    fill(255, 204, 0);
+
+    ellipse(matrxCntr[position].x_val, matrxCntr[position].y_val, size, size);
+    matrxCntr[position].filled = true;
+  }
+  fill(0);
+
 
 	// Implement highlight feature
-
+  for(var i = 0; i < matrxCntr.length; i++) {
+    var distance = dist(matrxCntr[i].x_val, matrxCntr[i].y_val, mouseX, mouseY);
+    if( distance < 10) {
+      if(matrxCntr[i].filled == true) {
+        fill(250);
+        ellipse(matrxCntr[i].x_val, matrxCntr[i].y_val, size, size); 
+      }
+    }
+  }
+  fill(0);
 
 }
